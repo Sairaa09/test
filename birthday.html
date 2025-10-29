@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday, Madam Ji!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/nastaliq-cdn@nastaliq/Jameel-Noori-Nastaleeq.css" rel="stylesheet">
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        background: #0a0a12;
+        color: #e0e0ff;
+        min-height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* PAGE TRANSITION */
+    .page {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        text-align: center;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(30px);
+        transition: opacity .7s ease, transform .7s ease;
+    }
+    .page.active { opacity: 1; visibility: visible; transform: translateY(0); }
+
+    h1, h2, p { color: #e0e0ff; text-shadow: 0 0 8px rgba(100,150,255,.4); }
+    .glow {
+        font-size: clamp(2rem, 8vw, 3.5rem);
+        font-weight: 900;
+        background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6c5ce7, #00d2ff);
+        background-size: 400%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: glow 3s ease-in-out infinite, float 3s ease-in-out infinite;
+    }
+    @keyframes glow { 0%,100% { background-position: 0%; } 50% { background-position: 100%; } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+    .btn {
+        margin-top: 2rem;
+        padding: .9rem 2rem;
+        font-weight: 700;
+        color: #fff;
+        background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 6px 16px rgba(108,92,231,.4);
+        transition: transform .3s, box-shadow .3s;
+        font-size: 1rem;
+    }
+    .btn:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(108,92,231,.6); }
+
+    /* PAGE 1 */
+    #page1 img {
+        max-width: 90%;
+        height: auto;
+        border-radius: 16px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 10px 25px rgba(0,0,0,.6);
+        object-fit: cover;
+    }
+
+    /* PAGE 2 - BALLOONS */
+    #page2 { background: radial-gradient(circle at center, #1a1a2e, #0f0f1a); }
+    .balloon {
+        position: absolute;
+        bottom: -100px;
+        width: 50px; height: 70px;
+        border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
+        animation: floatUp 6s linear infinite;
+        opacity: .85;
+    }
+    .balloon::before {
+        content: ''; position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
+        width: 2px; height: 100px; background: #aaa; opacity: .6;
+    }
+    @keyframes floatUp { to { transform: translateY(-120vh) rotate(15deg); opacity: 0; } }
+
+    /* PAGE 3 - CAKE (CANDLE ON TOP) */
+    #page3 {
+        background: radial-gradient(circle at center, #1a1a2e, #0f0f1a);
+    }
+    .cake-box {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        margin-top: 1.5rem;
+        height: 150px;
+    }
+    .cake {
+        position: relative;
+        width: 200px;
+        height: 120px;
+        background: #4e2c1e;
+        border-radius: 0 0 90px 90px;
+        box-shadow: 0 15px 0 #fff inset;
+        animation: floatCake 3s ease-in-out infinite;
+    }
+    @keyframes floatCake { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+    .candle {
+        position: absolute;
+        top: -55px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 14px;
+        height: 55px;
+        background: linear-gradient(180deg, #fafafa, #dcdcdc);
+        border-radius: 6px;
+        box-shadow: 0 0 10px rgba(255,255,255,0.7);
+        cursor: pointer;
+        z-index: 3;
+        display: flex;
+        justify-content: center;
+    }
+    .flame {
+        position: absolute;
+        top: -22px;
+        width: 18px;
+        height: 24px;
+        background: radial-gradient(ellipse at center, #ffb300 0%, #ff4500 80%);
+        border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
+        box-shadow: 0 0 25px #ff8c00;
+        animation: flicker .15s infinite alternate;
+    }
+    @keyframes flicker { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: .85; } }
+    .candle.blown .flame { animation: none; opacity: 0; transform: scale(0); }
+
+    /* PAGE 4 - BOOK CARD (RESPONSIVE) */
+    #page4 { background: linear-gradient(135deg, #16213e, #0f0f1a); }
+    .book-wrapper {
+        perspective: 1200px;
+        width: 100%;
+        max-width: 340px;
+        margin: 2rem auto;
+    }
+    .book {
+        position: relative;
+        width: 100%;
+        height: clamp(340px, 90vw, 420px);
+        transform-style: preserve-3d;
+        transition: transform 1.2s cubic-bezier(.6,.2,.1,1);
+        cursor: pointer;
+        border-radius: 8px 15px 15px 8px;
+        box-shadow: 0 12px 30px rgba(0,0,0,.6);
+    }
+    .book.open { transform: rotateY(-150deg); }
+
+    .cover, .inner {
+        position: absolute;
+        inset: 0;
+        backface-visibility: hidden;
+        padding: clamp(1.5rem, 5vw, 2.5rem);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        text-align: center;
+        overflow-y: auto;
+        line-height: 1.8;
+    }
+    .cover {
+        background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+        color: #fff;
+        z-index: 2;
+        border-radius: 8px 15px 15px 8px;
+    }
+    .inner {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        color: #e0e0ff;
+        transform: rotateY(180deg);
+        border: 3px solid #333;
+        border-left: none;
+        border-radius: 0 15px 15px 0;
+    }
+    .inner p {
+        font-size: clamp(0.95rem, 3.2vw, 1.15rem);
+        margin: 0.8rem 0;
+        word-wrap: break-word;
+    }
+    .highlight {
+        font-size: clamp(1.2rem, 4.5vw, 1.6rem);
+        font-weight: 900;
+        background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6c5ce7, #00d2ff);
+        background-size: 400%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: glow 3s ease-in-out infinite;
+        display: block;
+        margin: 0.8rem 0;
+    }
+    .urdu {
+        font-family: 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', sans-serif;
+        font-size: clamp(1.1rem, 4vw, 1.4rem);
+        color: #d6d5e0;
+        direction: rtl;
+        text-align: center;
+        line-height: 2.2;
+        margin: 1rem 0;
+    }
+    .divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #6c5ce7, transparent);
+        margin: 1.2rem 0;
+        width: 80%;
+    }
+    .heart {
+        color: #ff6b6b;
+        font-size: 1.6rem;
+        animation: pulse 1.5s infinite;
+        display: inline-block;
+    }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+
+    /* MOBILE RESPONSIVE */
+    @media (max-width: 480px) {
+        .glow { font-size: 2rem; }
+        .btn { padding: .7rem 1.5rem; font-size: .95rem; }
+        .cake { width: 160px; height: 95px; }
+        .candle { width: 12px; height: 45px; top: -45px; }
+        .flame { top: -18px; width: 14px; height: 18px; }
+        .book { height: 340px; }
+        .cover, .inner { padding: 1.2rem; }
+        .cover h2 { font-size: 1.8rem; }
+        .inner p { font-size: 0.95rem; }
+        .highlight { font-size: 1.3rem; }
+        .urdu { font-size: 1.1rem; line-height: 2; }
+    }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div id="page1" class="page active">
+    <img src="/muteeba.jpeg" alt="Madam Ji" width="300" height="200">
+    <h1>Welcome, Madam Ji!</h1>
+    <p>May your day be magical.</p>
+    <button class="btn" onclick="go(2)">Click to Start</button>
+</div>
+
+<!-- PAGE 2 -->
+<div id="page2" class="page">
+    <div class="glow">Happy Birthday, Madam Ji!</div>
+    <p>Wishing you joy forever!</p>
+    <button class="btn" onclick="go(3)">Next</button>
+</div>
+
+<!-- PAGE 3 -->
+<div id="page3" class="page">
+    <h2 style="margin-bottom:1.5rem;">Blow the Candle, Madam Ji!</h2>
+    <div class="cake-box">
+        <div class="cake">
+            <div class="candle" onclick="blow(this)">
+                <div class="flame"></div>
+            </div>
+        </div>
+    </div>
+    <div id="next3" style="display:none; margin-top:1.5rem;">
+        <button class="btn" onclick="go(4)">Next</button>
+    </div>
+</div>
+
+<!-- PAGE 4 - BOOK CARD -->
+<div id="page4" class="page">
+    <h2 style="margin-bottom:1rem;">A Special Wish</h2>
+    <div class="book-wrapper">
+        <div class="book" id="book" onclick="toggleBook()">
+            <div class="cover">
+                <h2>Happy Birthday!</h2>
+                <p>Tap to open <span class="heart">Heart</span></p>
+            </div>
+            <div class="inner">
+                <p>Dₑₐᵣ</p>
+                <p class="highlight">𝗛𝗔𝗣𝗣𝗬 𝗕𝗜𝗥𝗧𝗛𝗗𝗔𝗬 𝗧𝗢 𝗬𝗢𝗨 </p>
+
+                <div class="divider"></div>
+
+                <p class="highlight">
+                    𝗛𝗮𝗽𝗽𝘆 𝗯𝗶𝗿𝘁𝗵𝗱𝗮𝘆 𝘄𝗶𝘀𝗵 𝘆𝗼𝘂 𝗺𝗮𝗻𝘆 𝗺𝗮𝗻𝘆 𝗵𝗮𝗽𝗽𝘆 𝗿𝗲𝘁𝘂𝗿𝗻𝘀 𝗼𝗳 𝘁𝗵𝗲 𝗱𝗮𝘆
+                </p>
+                <p>
+                    𝗚𝗼𝗱 𝗯𝗹𝗲𝘀𝘀 𝘆𝗼𝘂.. Loving Sparkles 𝗜 𝘄𝗮𝗻𝘁 𝘁𝗼 𝘄𝗶𝘀𝗵 𝗵𝗮𝗽𝗽𝘆 𝗟𝗶𝗳𝗲 Heart Smiling 𝗔𝗹𝘄𝗮𝘆𝘀 𝗸𝗲𝗲𝗽 𝘀𝗺𝗶𝗹𝗲 𝗼𝗻 𝘆𝗼𝘂𝗿 𝗳𝗮𝗰𝗲 😊💞
+                </p>
+
+
+                <p class="highlight">
+                    𝗪𝗶𝘀𝗵 𝘆𝗼𝘂 𝗺𝗮𝗻𝘆 𝗺𝗮𝗻𝘆 𝗵𝗮𝗽𝗽𝘆 𝗿𝗲𝘁𝘂𝗿𝗻𝘀 𝗼𝗳 𝘁𝗵𝗲 𝗱𝗮𝘆
+
+                <div class="divider"></div>
+
+                <p class="urdu">
+                    *دعــا ہــــے اللّٰہ پاکــــــ ســــے کہ وہ تمــــــہـــیں ریـــــــــت کـــــــے ذروں چـــــانـــــد ســــــورج کـــــی کـــــرنـــــوں ۔۔۔*<br>
+                    *پـــــانــــی کــــے قطــــــروں ســـــے بھـــــی زیـــــادہ خـــوشیـــــاں عطـــــــا فــــــرمائـــــے ۔۔۔*<br>
+                    *ہـــــر خــــــوشـــی ہـــــر نعمــــــت عطـــــا فــــرمـــائـــــــــــے آمــــــــــــین ۔۔۔*<br>
+                    
+                </p>
+
+                <div class="divider"></div>
+
+                <p class="highlight">
+                    𝗠𝗮𝘆 𝗔𝗹𝗺𝗶𝗴𝗵𝘁𝘆 𝗔𝗹𝗹𝗮𝗵 𝗯𝗹𝗲𝘀𝘀 𝘆𝗼𝘂 𝗪𝗶𝘁𝗵 𝗺𝗮𝗻𝘆 𝘆𝗲𝗮𝗿𝘀 
+                </p>
+
+                <p><em>With warmest wishes</em> <span class="heart">Heart</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const pages = document.querySelectorAll('.page');
+    let cur = 1;
+
+    function go(n) {
+        if (n < 1 || n > pages.length) return;
+        document.getElementById(`page${cur}`).classList.remove('active');
+        setTimeout(() => {
+            document.getElementById(`page${n}`).classList.add('active');
+            cur = n;
+            if (n === 2) balloons();
+        }, 400);
+    }
+
+    function balloons() {
+        const colors = ['#ff6b6b', '#6c5ce7', '#00d2ff', '#ffd93d', '#a29bfe'];
+        const container = document.getElementById('page2');
+        for (let i = 0; i < 16; i++) {
+            setTimeout(() => {
+                const b = document.createElement('div');
+                b.className = 'balloon';
+                b.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                b.style.left = Math.random() * 100 + '%';
+                b.style.animationDelay = Math.random() * 3 + 's';
+                b.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                container.appendChild(b);
+                b.addEventListener('animationend', () => b.remove());
+            }, i * 350);
+        }
+    }
+
+    let blown = false;
+    function blow(el) {
+        if (blown) return;
+        blown = true;
+        el.classList.add('blown');
+        const poof = document.createElement('div');
+        poof.textContent = '💨';
+        poof.style.position = 'absolute';
+        poof.style.left = '50%';
+        poof.style.top = '-10px';
+        poof.style.transform = 'translateX(-50%)';
+        poof.style.fontSize = '22px';
+        poof.style.animation = 'blowOut .8s forwards';
+        el.appendChild(poof);
+        setTimeout(() => poof.remove(), 800);
+        setTimeout(() => { document.getElementById('next3').style.display = 'block'; }, 700);
+    }
+
+    let open = false;
+    function toggleBook() {
+        open = !open;
+        document.getElementById('book').classList.toggle('open', open);
+    }
+</script>
+</body>
+</html>
